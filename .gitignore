@@ -9,7 +9,7 @@
 !*.h
 
 # Keep the .gitignore file itself tracked
-!.gitignore
+.gitignore
 
 #Ignore files by their names
 test.c
