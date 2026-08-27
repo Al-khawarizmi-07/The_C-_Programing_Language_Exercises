@@ -8,8 +8,7 @@
 !*.c
 !*.h
 
-# Keep the .gitignore file itself tracked
-.gitignore
-
 #Ignore files by their names
 test.c
+.idea
+.gitignore
