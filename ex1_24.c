@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#define ANSI_COLOR_RED "\x1b[31m"
+
+
+
 // Global variables
 const int STACK_SIZE = 1024;
 
@@ -32,9 +36,11 @@ bool saveSymbol(Context *context, int previousCharacter, int currentCharacter);
 int main() {
     int stack[STACK_SIZE];
     int index = -1;
-    int character = -1;
+    int currentCharacter = -1;
+    int previousCharacter = -1;
 
-    while ((character = getchar()) != EOF) {
+
+    while ((currentCharacter = getchar()) != EOF) {
         //Todo we need to implement the contexts
 
     }
@@ -42,7 +48,7 @@ int main() {
     return 0;
 }
 
-bool saveSymbol(Context *context, int previousCharacter, int currentCharacter) {
+bool saveSymbol(Context *context, const int previousCharacter, const int currentCharacter) {
     if (context->currentContext == context->outside) {
         if (currentCharacter == '{' || currentCharacter  == '}'
             || currentCharacter == '[' || currentCharacter == ']'
@@ -71,7 +77,7 @@ bool saveSymbol(Context *context, int previousCharacter, int currentCharacter) {
         }
 
         if (previousCharacter == '\\') {
-            printf("[Error]: This character %c%c is used only inside a single quotes ('') or double quotes (\"\"):", previousCharacter, currentCharacter);
+            printf(ANSI_COLOR_RED"[Error]: This character %c%c is used only inside a single quotes ('') or double quotes (\"\"):", previousCharacter, currentCharacter);
             return false;
         }
 
@@ -82,7 +88,7 @@ bool saveSymbol(Context *context, int previousCharacter, int currentCharacter) {
         }
 
         if (currentCharacter == '\n') {
-            printf("[Error]: Missed double quotes: \" ");
+            printf(ANSI_COLOR_RED"[Error]: Missed double quotes: \" ");
             context->currentContext = context->outside;
             return false;
         }
@@ -93,16 +99,22 @@ bool saveSymbol(Context *context, int previousCharacter, int currentCharacter) {
         }
 
         if (currentCharacter == '\n') {
-            printf("[Error]: Missed single quote: ' ");
+            printf(ANSI_COLOR_RED"[Error]: Missed single quote: ' ");
             context->currentContext = context->outside;
             return false;
         }
     } else if (context->currentContext == context->insideCommentsTypeOne) {
-        //Todo Implements this
+        if (currentCharacter == '\n' || currentCharacter == EOF) {
+            context->currentContext = context->outside;
+            return true;
+        }
     } else if (context->currentContext == context->insideCommentsTypeTwo) {
-
+        if (previousCharacter == '*' && currentCharacter == '/') {
+            context->currentContext = context->outside;
+            return true;
+        }
     } else {
-
+        printf(ANSI_COLOR_RED"[Error]: Unknown context !");
     }
 
     return false;
