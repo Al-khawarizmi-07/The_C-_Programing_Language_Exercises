@@ -23,27 +23,40 @@ struct Context {
     int currentContext;
 } typedef Context;
 
-Context context = {
-    0,
-    1,
-    2,
-    3,
-    4,
-    0
-};
-
 bool saveSymbol(Context *context, int previousCharacter, int currentCharacter);
 int main() {
     int stack[STACK_SIZE];
+    int stackAnalyzer[STACK_SIZE];
     int index = -1;
     int currentCharacter = -1;
     int previousCharacter = -1;
+    Context context = {
+        0,
+        1,
+        2,
+        3,
+        4,
+        0
+    };
 
 
     while ((currentCharacter = getchar()) != EOF) {
-        //Todo we need to implement the contexts
+        if (saveSymbol(&context, previousCharacter, currentCharacter)) {
+            if ((previousCharacter == '/' && currentCharacter == '/')
+                || (previousCharacter == '/' && currentCharacter == '*')
+                || (previousCharacter == '*' && currentCharacter == '/')) {
 
+                push(previousCharacter + currentCharacter, stack, &index);
+            } else {
+                push(currentCharacter, stack, &index);
+            }
+        }
+
+        previousCharacter = currentCharacter;
     }
+
+    push(EOF, stack, &index);
+
 
     return 0;
 }
@@ -130,6 +143,7 @@ bool isFull(int index) {
 
 void push(int character, int stack[], int *index) {
     if (isFull(*index)) {
+        printf(ANSI_COLOR_RED "[Error]: The stack is full.");
         return;
     }
 
@@ -139,6 +153,7 @@ void push(int character, int stack[], int *index) {
 
 int pop(int stack[], int *index) {
     if (isEmpty(*index)) {
+        printf(ANSI_COLOR_RED "[Error]: The stack is empty so no element stil.");
         return -1;
     }
 
