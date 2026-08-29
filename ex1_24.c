@@ -25,6 +25,7 @@ bool isFull(int index);
 
 // General functions
 bool saveToken(Context *context, int previousCharacter, int currentCharacter);
+bool isOppositeToken(const int tokenOne, const int tokenTwo);
 void analyseTokens(int stack[], int *index);
 
 
@@ -141,7 +142,22 @@ bool saveToken(Context *context, const int previousCharacter, const int currentC
     return false;
 }
 
+bool isOppositeToken(const int tokenOne, const int tokenTwo) {
+    if ((tokenOne == '{' && tokenTwo == '}')
+    || (tokenOne == '(' && tokenTwo == ')')
+    || (tokenOne == '[' && tokenTwo == ']')
+    || (tokenOne == '"' && tokenTwo == '"')
+    || (tokenOne == '\'' && tokenTwo == '\'')
+    || (tokenOne == ('/' + '/' + '*') && tokenTwo == ('*' + '*' + '/'))
+    || (tokenOne == ('/' + '/' + '/') && (tokenTwo == '\n' || tokenTwo == EOF))) {
+        return true;
+    }
+    return false;
+}
+
 void analyseTokens(int stack[], int *index) {
+    int bufferStack[STACK_SIZE];
+    int bufferIndex = -1;
 
 }
 
