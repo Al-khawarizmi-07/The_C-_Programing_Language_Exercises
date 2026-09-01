@@ -22,7 +22,7 @@ void push(int character, int stack[], int *index);
 int pop(int stack[], int *index);
 bool isEmpty(int index);
 bool isFull(int index);
-
+int top(int stack[], const int index);
 // General functions
 bool saveToken(Context *context, int previousCharacter, int currentCharacter);
 bool isOppositeToken(const int tokenOne, const int tokenTwo);
@@ -159,6 +159,7 @@ void analyseTokens(int stack[], int *index) {
     int bufferStack[STACK_SIZE];
     int bufferIndex = -1;
 
+
 }
 
 bool isEmpty(int index) {
@@ -188,4 +189,12 @@ int pop(int stack[], int *index) {
 
     (*index)--;
     return stack[currentIndex];
+}
+
+int top(int stack[], const int index) {
+    if (! isEmpty(index)) {
+        return stack[index];
+    }
+
+    return -1;
 }
