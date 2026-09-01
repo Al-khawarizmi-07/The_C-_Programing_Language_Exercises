@@ -160,12 +160,29 @@ void analyseTokens(int stack[], int *index) {
     int bufferIndex = -1;
 
     while (bufferIndex != -1 && *index != -1) {
+        // this function is for initialization of the bufferStack
+        // Empty bufferStack <----> Filled stack
         if (isEmpty(bufferIndex)) {
             push(pop(stack, index), bufferStack, &bufferIndex);
-            continue;
+        }
+        // Here we process the phase where Filled bufferStack <-----> Filled stack
+        if (!isEmpty(bufferIndex) && !isEmpty(*index)) {
+            if (isOppositeToken(top(stack, index), top(bufferStack, &bufferIndex))) {
+                pop(stack, index);
+                pop(bufferStack, &bufferIndex);
+            } else {
+                push(pop(stack, index), bufferStack, &bufferIndex);
+            }
         }
 
-        if (isOppositeToken(top(stack, index), top(bufferStack, &bufferIndex))) {
+
+        // Here we process the phase where Filled bufferStack <----> Empty Stack
+        if (!isEmpty(bufferIndex) && isEmpty(*index)) {
+
+        }
+
+        // Here we process the case where Empty bufferStack <----> Empty Stack
+        if (isEmpty(bufferIndex) && isEmpty(*index)) {
 
         }
     }
