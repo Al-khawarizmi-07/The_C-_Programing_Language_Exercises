@@ -5,7 +5,7 @@
 #define ANSI_COLOR_GREEN   "\033[32m"
 #define ANSI_COLOR_RESET   "\033[0m"
 
-// #define DEBUG_MODE
+#define DEBUG_MODE
 
 #ifdef DEBUG_MODE
     #define DEBUG_PRINT(fmt, ...) printf(fmt,  ##__VA_ARGS__)
@@ -20,11 +20,13 @@ struct Context {
     const int insideSingleQuotes;
     const int insideCommentsTypeOne; // type one it means this symbols // ended by this symbol \n or this symbol EOF
     const int insideCommentsTypeTwo; // type two it means this symbols /* ended by this symbol */
+    const int escapeSequences;
     int currentContext;
+    int previousContext;
 } typedef Context;
 
 // Global variables
-const int STACK_SIZE = 1024;
+const int STACK_SIZE = 10 * 1024;
 
 // Function prototypes
 // Stack functions
@@ -50,7 +52,7 @@ int main() {
         2,
         3,
         4,
-        0
+        5,
     };
 
     // Fill the stack with the tokens to analyze them
@@ -85,6 +87,11 @@ int main() {
 
 bool saveToken(Context *context, const int previousCharacter, const int currentCharacter) {
     if (context->currentContext == context->outside) {
+        if (currentCharacter == '\\') {
+            context->previousContext = context->currentContext;
+            context->currentContext = context->escapeSequences;
+            return false;
+        }
         if (currentCharacter == '{' || currentCharacter  == '}'
             || currentCharacter == '[' || currentCharacter == ']'
             || currentCharacter == '(' ||currentCharacter == ')') {
@@ -92,7 +99,10 @@ bool saveToken(Context *context, const int previousCharacter, const int currentC
         }
 
         if (currentCharacter == '"') {
+            printf("switch to \" context");
+            printf("context: %d", context->currentContext);
             context->currentContext = context->insideDoubleQuotes;
+            printf("context: %d", context->currentContext);
             return true;
         }
 
@@ -115,9 +125,15 @@ bool saveToken(Context *context, const int previousCharacter, const int currentC
             printf(ANSI_COLOR_RED"[Error]: This character %c%c is used only inside a single quotes ('') or double quotes (\"\")\n"ANSI_COLOR_RESET, previousCharacter, currentCharacter);
             return false;
         }
-
     } else if (context->currentContext == context->insideDoubleQuotes) {
-        if (previousCharacter != '\\' && currentCharacter == '"') {
+        if (currentCharacter == '\\') {
+            printf("switch to \\ context");
+            context->previousContext = context->currentContext;
+            context->currentContext = context->escapeSequences;
+            return false;
+        }
+
+        if (currentCharacter == '"') {
             context->currentContext = context->outside;
             return true;
         }
@@ -128,7 +144,13 @@ bool saveToken(Context *context, const int previousCharacter, const int currentC
             return false;
         }
     } else if (context->currentContext == context->insideSingleQuotes) {
-        if (previousCharacter != '\\' && currentCharacter == '\'') {
+        if (currentCharacter == '\\') {
+            context->previousContext = context->currentContext;
+            context->currentContext = context->escapeSequences;
+            return false;
+        }
+
+        if (currentCharacter == '\'') {
             context->currentContext = context->outside;
             return true;
         }
@@ -148,6 +170,10 @@ bool saveToken(Context *context, const int previousCharacter, const int currentC
             context->currentContext = context->outside;
             return true;
         }
+    } else if (context->currentContext == context->escapeSequences) {
+        printf("switch to previous context");
+        context->currentContext = context->previousContext;
+        return false;
     } else {
         printf(ANSI_COLOR_RED"[Error]: Unknown context !\n"ANSI_COLOR_RESET);
     }
@@ -206,6 +232,10 @@ void analyseTokens(int stack[], int *index) {
                // show the stack value
                 continue;
             }
+            while (bufferIndex > -1) {
+                printf("token: %3c\n", pop(bufferStack, &bufferIndex));
+            }
+
             printf(ANSI_COLOR_RED"[Error]: there is a missed opposite for token: %c\n"ANSI_COLOR_RESET, top(bufferStack, &bufferIndex));
             isProcessFinished = true;
 
