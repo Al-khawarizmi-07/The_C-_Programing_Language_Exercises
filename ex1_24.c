@@ -2,6 +2,16 @@
 #include <stdbool.h>
 
 #define ANSI_COLOR_RED "\x1b[31m"
+#define ANSI_COLOR_GREEN   "\033[32m"
+#define ANSI_COLOR_RESET   "\033[0m"
+
+// #define DEBUG_MODE
+
+#ifdef DEBUG_MODE
+    #define DEBUG_PRINT(fmt, ...) printf(fmt,  ##__VA_ARGS__)
+#else
+    #define DEBUG_PRINT(fmt, ...)
+#endif
 
 // Templates variables
 struct Context {
@@ -44,7 +54,7 @@ int main() {
     };
 
     // Fill the stack with the tokens to analyze them
-    printf("[Debug]: Filling the stack with the tokens\n");
+    DEBUG_PRINT("[Debug]: Filling the stack with the tokens\n");
     while ((currentCharacter = getchar()) != EOF) {
         if (saveToken(&context, previousCharacter, currentCharacter)) {
             if ((previousCharacter == '/' && currentCharacter == '/')
@@ -102,7 +112,7 @@ bool saveToken(Context *context, const int previousCharacter, const int currentC
         }
 
         if (previousCharacter == '\\') {
-            printf(ANSI_COLOR_RED"[Error]: This character %c%c is used only inside a single quotes ('') or double quotes (\"\")\n", previousCharacter, currentCharacter);
+            printf(ANSI_COLOR_RED"[Error]: This character %c%c is used only inside a single quotes ('') or double quotes (\"\")\n"ANSI_COLOR_RESET, previousCharacter, currentCharacter);
             return false;
         }
 
@@ -113,7 +123,7 @@ bool saveToken(Context *context, const int previousCharacter, const int currentC
         }
 
         if (currentCharacter == '\n') {
-            printf(ANSI_COLOR_RED"[Error]: Missed double quotes: \" \n");
+            printf(ANSI_COLOR_RED"[Error]: Missed double quotes: \" \n"ANSI_COLOR_RESET);
             context->currentContext = context->outside;
             return false;
         }
@@ -124,7 +134,7 @@ bool saveToken(Context *context, const int previousCharacter, const int currentC
         }
 
         if (currentCharacter == '\n') {
-            printf(ANSI_COLOR_RED"[Error]: Missed single quote: ' \n");
+            printf(ANSI_COLOR_RED"[Error]: Missed single quote: ' \n"ANSI_COLOR_RESET);
             context->currentContext = context->outside;
             return false;
         }
@@ -139,7 +149,7 @@ bool saveToken(Context *context, const int previousCharacter, const int currentC
             return true;
         }
     } else {
-        printf(ANSI_COLOR_RED"[Error]: Unknown context !\n");
+        printf(ANSI_COLOR_RED"[Error]: Unknown context !\n"ANSI_COLOR_RESET);
     }
 
     return false;
@@ -157,14 +167,14 @@ bool isOppositeToken(const int tokenOne, const int tokenTwo) {
     || (tokenOne == EOF && tokenTwo == -1)
     || (tokenOne == '\n' && tokenTwo == -1)
     || (tokenOne == -1 && tokenTwo == '\n')) {
-        printf("[Debug]: tokenOne: %d, tokenTwo: %d\n", tokenOne, tokenTwo);
+        DEBUG_PRINT("[Debug]: tokenOne: %d, tokenTwo: %d\n", tokenOne, tokenTwo);
         return true;
     }
     return false;
 }
 
 void analyseTokens(int stack[], int *index) {
-    printf("[Debug]: Analysing the tokens ...\n");
+    DEBUG_PRINT("[Debug]: Analysing the tokens ...\n");
     int bufferStack[STACK_SIZE];
     int bufferIndex = -1;
     bool isProcessFinished = false;
@@ -173,12 +183,12 @@ void analyseTokens(int stack[], int *index) {
         // this function is for initialization of the bufferStack
         // Empty bufferStack <----> Filled stack
         if (isEmpty(bufferIndex)) {
-            printf("[Debug]: The buffer stack is empty\n");
+            DEBUG_PRINT("[Debug]: The buffer stack is empty\n");
             push(pop(stack, index), bufferStack, &bufferIndex);
         }
         // Here we process the phase where Filled bufferStack <-----> Filled stack
         if (!isEmpty(bufferIndex) && !isEmpty(*index)) {
-            printf("[Debug]: Both the stack are filled\n");
+            DEBUG_PRINT("[Debug]: Both the stack are filled\n");
             if (isOppositeToken(top(stack, index), top(bufferStack, &bufferIndex))) {
                 pop(stack, index);
                 pop(bufferStack, &bufferIndex);
@@ -190,13 +200,13 @@ void analyseTokens(int stack[], int *index) {
 
         // Here we process the phase where Filled bufferStack <----> Empty Stack
         if (!isEmpty(bufferIndex) && isEmpty(*index)) {
-            printf("[Debug]: The buffer stack is filled and main stack is empty\n");
+            DEBUG_PRINT("[Debug]: The buffer stack is filled and main stack is empty\n");
             if (top(bufferStack, &bufferIndex) == EOF) {
                 pop(bufferStack, &bufferIndex);
                // show the stack value
                 continue;
             }
-            printf(ANSI_COLOR_RED"[Error]: there is a missed opposite for token: %c\n", top(bufferStack, &bufferIndex));
+            printf(ANSI_COLOR_RED"[Error]: there is a missed opposite for token: %c\n"ANSI_COLOR_RESET, top(bufferStack, &bufferIndex));
             isProcessFinished = true;
 
             break;
@@ -204,8 +214,8 @@ void analyseTokens(int stack[], int *index) {
 
         // Here we process the case where Empty bufferStack <----> Empty Stack
         if (isEmpty(bufferIndex) && isEmpty(*index)) {
-            printf("[Debug]: Both the stacks are empty\n");
-            printf("The source code tokens rules are correct ^^\n");
+            DEBUG_PRINT("[Debug]: Both the stacks are empty\n");
+            printf(ANSI_COLOR_GREEN"The source code tokens rules are correct ^^\n"ANSI_COLOR_RESET);
             isProcessFinished = true;
         }
     }
@@ -221,13 +231,13 @@ bool isFull(int index) {
 }
 
 void push(int character, int stack[], int *index) {
-    printf("[Debug]: Pushing element ...\n");
+    DEBUG_PRINT("[Debug]: Pushing element ...\n");
     if (character <= -1) {
-        printf(ANSI_COLOR_RED "[Error]: The character is invalid to be pushed.\n");
+        // printf(ANSI_COLOR_RED "[Error]: The character is invalid to be pushed.\n");
         return;
     }
     if (isFull(*index)) {
-        printf(ANSI_COLOR_RED "[Error]: The stack is full.\n");
+        printf(ANSI_COLOR_RED "[Error]: The stack is full.\n"ANSI_COLOR_RESET);
         return;
     }
 
@@ -236,10 +246,10 @@ void push(int character, int stack[], int *index) {
 }
 
 int pop(int stack[], int *index) {
-    printf("[Debug]: Poping element ...\n");
+    DEBUG_PRINT("[Debug]: Poping element ...\n");
     int currentIndex = *index;
     if (isEmpty(*index)) {
-        printf(ANSI_COLOR_RED "[Error]: The stack is empty so no element still.\n");
+        printf(ANSI_COLOR_RED "[Error]: The stack is empty so no element still.\n"ANSI_COLOR_RESET);
         return -1;
     }
 
@@ -248,7 +258,7 @@ int pop(int stack[], int *index) {
 }
 
 int top(int stack[], const int *index) {
-    printf("[Debug]: Get the top element\n");
+    DEBUG_PRINT("[Debug]: Get the top element\n");
     if (! isEmpty(*index)) {
         return stack[*index];
     }
