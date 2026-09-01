@@ -99,10 +99,7 @@ bool saveToken(Context *context, const int previousCharacter, const int currentC
         }
 
         if (currentCharacter == '"') {
-            printf("switch to \" context");
-            printf("context: %d", context->currentContext);
             context->currentContext = context->insideDoubleQuotes;
-            printf("context: %d", context->currentContext);
             return true;
         }
 
@@ -127,7 +124,6 @@ bool saveToken(Context *context, const int previousCharacter, const int currentC
         }
     } else if (context->currentContext == context->insideDoubleQuotes) {
         if (currentCharacter == '\\') {
-            printf("switch to \\ context");
             context->previousContext = context->currentContext;
             context->currentContext = context->escapeSequences;
             return false;
@@ -171,7 +167,6 @@ bool saveToken(Context *context, const int previousCharacter, const int currentC
             return true;
         }
     } else if (context->currentContext == context->escapeSequences) {
-        printf("switch to previous context");
         context->currentContext = context->previousContext;
         return false;
     } else {
