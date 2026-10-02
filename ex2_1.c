@@ -46,11 +46,11 @@ int main() {
 
   printf("--------> Unsigned values: \n");
 
-  printf("    char [%u, %u]\n", 0, computeRange(UCHAR_WIDTH + 1, 1));
-  printf("    short int [%hu, %hu]\n", 0,  computeRange(USHRT_WIDTH + 1, 1));
-  printf("    int [%u, %u]\n", 0, computeRange(UINT_WIDTH + 1, 1));
-  printf("    long int [%lu, %lu]\n", 0, computeRange(ULONG_WIDTH + 1, 1));
-  printf("    long long int [%llu, %llu]\n", 0, computeRange(ULLONG_WIDTH + 1, 1));
+  printf("    char [%u, %u]\n", 0, computeRange(UCHAR_WIDTH, 1));
+  printf("    short int [%hu, %hu]\n", 0,  computeRange(USHRT_WIDTH, 1));
+  printf("    int [%u, %u]\n", 0, computeRange(UINT_WIDTH, 1));
+  printf("    long int [%lu, %lu]\n", 0, (unsigned long int)pow(2LL, (long long int)ULONG_WIDTH) - 1UL);
+  printf("    long long int [%llu, %llu]\n", 0, (unsigned long long int)pow(2ULL, (unsigned long long int)ULLONG_WIDTH) - 1ULL);
 
 
 
