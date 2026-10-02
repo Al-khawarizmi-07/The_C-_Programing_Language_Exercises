@@ -3,7 +3,7 @@
 #include <float.h>
 #include <math.h>
 
-int computeRange(int bit, int sign);
+long long int computeRange(long long int bit, long long int sign);
 
 int main() {
   printf("###########################################################\n");
@@ -33,12 +33,15 @@ int main() {
   printf("######################################################\n");
   printf("#   Ranges of integral data types from computation   #\n");
   printf("######################################################\n");
-  
-  printf("    char [%d, %d]\n", computeRange(SCHAR_WIDTH, -1), computeRange(SCHAR_WIDTH, 1) );
-  printf("    short int [%d, %d]\n", computeRange(SHRT_WIDTH, -1), computeRange(SHRT_WIDTH, 1));
-  printf("    int [%d, %d]\n", computeRange(INT_WIDTH, -1), computeRange(INT_WIDTH, 1));
-  printf("    long int [%ld, %ld]\n", computeRange(LONG_WIDTH, -1), computeRange(LONG_WIDTH, 1));
-  printf("    long long int [%lld, %lld]\n", computeRange(LLONG_WIDTH, -1), computeRange(LLONG_WIDTH, 1));
+ 
+  printf("--------> Signed values: \n");
+
+  printf("    char [%d, %d]\n", computeRange(SCHAR_WIDTH - 1, -1), computeRange(SCHAR_WIDTH - 1, 1) );
+  printf("    short int [%d, %d]\n", computeRange(SHRT_WIDTH - 1, -1), computeRange(SHRT_WIDTH - 1, 1));
+  printf("    int [%d, %d]\n", computeRange(INT_WIDTH - 1, -1), computeRange(INT_WIDTH - 1, 1));
+  fflush(stdout);
+  printf("    long int [%ld, %ld]\n", computeRange(LONG_WIDTH - 1, -1), computeRange(LONG_WIDTH - 1, 1));
+  printf("    long long int [%lld, %lld]\n", computeRange(LLONG_WIDTH - 1, -1), computeRange(LLONG_WIDTH - 1, 1));
 
 
   printf("--------> Unsigned values: \n");
@@ -56,12 +59,11 @@ int main() {
   printf("############################################################\n");
   printf("#   Ranges of floating point data types from computation   #\n");
   printf("############################################################\n");
-   
 
   return 0;
 }
 
 
-int computeRange(int bit, int sign) {
-  return sign * pow(2, bit - 1) - 1;
+long long int computeRange(long long int bit, long long int sign) {
+  return sign >= 0 ? (long long int)pow(2, bit) - 1 : -1 * (long long int)pow(2, bit);
 } 
