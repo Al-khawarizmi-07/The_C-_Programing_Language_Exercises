@@ -4,6 +4,8 @@
 #include <math.h>
 
 long long int computeRange(long long int bit, long long int sign);
+//TODO: Calculate the IEEE precision Format for float double long double with one general function
+long double computeFloatRange(long long int signBit, long long int exponentBit, long long int MantissaBit);
 
 int main() {
   printf("###########################################################\n");
@@ -72,8 +74,29 @@ int main() {
   printf("    double[%e, %e]\n", -DBL_MAX, DBL_MAX);         
   printf("    long double[%Le, %Le]\n", -LDBL_MAX, LDBL_MAX);
 
+  printf("\n\n\n");
+
+  printf("############################################################\n");
+  printf("#   Ranges of floating point data types from computation   #\n");
+  printf("############################################################\n");
+  
+  printf("----------> Decimal Notation: \n");                
+
+
+  //TODO use function instead of log mathemtic expression
+  printf("    float[%f, %f]\n", ((float)powf(-1.0f, 1.0f)) * ( 1.0f + (1.0f - (1.0f / (float)powf(2.0f, 23.0f)))) * ((float)powf(2.0f, 254.0f - 127.0f)) , ((float)powf(-1.0f, 0.0f)) * (1.0f + 1.0f - (1.0f / (float)powf(2.0f, 23.0f))) * ((float)powf(2.0f, 254.0f - 127.0f)));
+  //printf("    double[%f, %f]\n", -DBL_MAX, DBL_MAX);         
+  //printf("    long double[%Lf, %Lf]\n", -LDBL_MAX, LDBL_MAX);
+  
+
+  //printf("----------> Exponent Notation: \n");               
+  
+  //printf("    float[%e, %e]\n", -FLT_MAX, FLT_MAX);          
+  //printf("    double[%e, %e]\n", -DBL_MAX, DBL_MAX);         
+  //printf("    long double[%Le, %Le]\n", -LDBL_MAX, LDBL_MAX);
 
   
+
   return 0;
 }
 
