@@ -56,9 +56,16 @@ int main() {
 
   printf("\n\n\n");
 
-  printf("############################################################\n");
-  printf("#   Ranges of floating point data types from computation   #\n");
-  printf("############################################################\n");
+  printf("#######################################################\n");
+  printf("#   Ranges of floating point data types from header   #\n");
+  printf("#######################################################\n");
+  
+  printf("----------> Decimal Notation: \n");
+  
+  printf("    float[%f, %f]\n", -FLT_MAX, FLT_MAX);
+  printf("    double[%f, %f]\n", -DBL_MAX, DBL_MAX);
+  printf("    long double[%Lf, %Lf]\n", -LDBL_MAX, LDBL_MAX);
+
 
   return 0;
 }
