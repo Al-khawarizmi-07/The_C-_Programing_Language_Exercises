@@ -65,8 +65,15 @@ int main() {
   printf("    float[%f, %f]\n", -FLT_MAX, FLT_MAX);
   printf("    double[%f, %f]\n", -DBL_MAX, DBL_MAX);
   printf("    long double[%Lf, %Lf]\n", -LDBL_MAX, LDBL_MAX);
+  
+  printf("----------> Exponent Notation: \n");
+  
+  printf("    float[%e, %e]\n", -FLT_MAX, FLT_MAX);          
+  printf("    double[%e, %e]\n", -DBL_MAX, DBL_MAX);         
+  printf("    long double[%Le, %Le]\n", -LDBL_MAX, LDBL_MAX);
 
 
+  
   return 0;
 }
 
