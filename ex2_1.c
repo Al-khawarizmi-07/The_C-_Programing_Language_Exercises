@@ -5,7 +5,7 @@
 
 long long int computeRange(long long int bit, long long int sign);
 //TODO: Calculate the IEEE precision Format for float double long double with one general function
-long double computeFloatRange(long long int signBit, long long int exponentBit, long long int MantissaBit);
+long double computeFloatRange(long long int signBit, long long int exponentBit, long long int mantissaBit);
 
 int main() {
   printf("###########################################################\n");
@@ -85,8 +85,9 @@ int main() {
 
   //TODO use function instead of log mathemtic expression
   printf("    float[%f, %f]\n", ((float)powf(-1.0f, 1.0f)) * ( 1.0f + (1.0f - (1.0f / (float)powf(2.0f, 23.0f)))) * ((float)powf(2.0f, 254.0f - 127.0f)) , ((float)powf(-1.0f, 0.0f)) * (1.0f + 1.0f - (1.0f / (float)powf(2.0f, 23.0f))) * ((float)powf(2.0f, 254.0f - 127.0f)));
-  //printf("    double[%f, %f]\n", -DBL_MAX, DBL_MAX);         
-  //printf("    long double[%Lf, %Lf]\n", -LDBL_MAX, LDBL_MAX);
+  printf("    float[%Lf, %Lf]\n", computeFloatRange(1, 8, 23) , computeFloatRange(0, 8, 23));
+  printf("    double[%Lf, %Lf]\n", computeFloatRange(1, 11, 52), computeFloatRange(0, 11, 52));         
+  printf("    long double[%Lf, %Lf]\n", computeFloatRange(1, 15, 112), computeFloatRange(0, 15, 112));
   
 
   //printf("----------> Exponent Notation: \n");               
@@ -103,4 +104,19 @@ int main() {
 
 long long int computeRange(long long int bit, long long int sign) {
   return sign >= 0 ? (long long int)pow(2, bit) - 1 : -1 * (long long int)pow(2, bit);
-} 
+}
+
+
+long double computeFloatRange(long long int signBit, long long int exponentBit, long long int mantissaBit) {
+  long long int sign = signBit == 0 ? 1 : -1;
+  unsigned long long int bias = (unsigned long long int)pow(2, exponentBit - 1) - 1;
+  unsigned long long int maxExponent = (unsigned long long int)pow(2, exponentBit) - 2;
+  long double mantissa = 1 ;
+  
+  // we assume the the all bits on the mantissa are ones
+  for(int i = 1; i <= mantissaBit; i++) {
+    mantissa = mantissa + (long double)powf(2, - i);
+  }
+
+  return (long double)sign * ((long double)powf(2, maxExponent - bias)) * mantissa;
+}
