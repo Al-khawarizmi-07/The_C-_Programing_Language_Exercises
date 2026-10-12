@@ -83,18 +83,23 @@ int main() {
   printf("----------> Decimal Notation: \n");                
 
 
-  //TODO use function instead of log mathemtic expression
-  printf("    float[%f, %f]\n", ((float)powf(-1.0f, 1.0f)) * ( 1.0f + (1.0f - (1.0f / (float)powf(2.0f, 23.0f)))) * ((float)powf(2.0f, 254.0f - 127.0f)) , ((float)powf(-1.0f, 0.0f)) * (1.0f + 1.0f - (1.0f / (float)powf(2.0f, 23.0f))) * ((float)powf(2.0f, 254.0f - 127.0f)));
-  printf("    float[%Lf, %Lf]\n", computeFloatRange(1, 8, 23) , computeFloatRange(0, 8, 23));
+  printf("    float[%f, %f]\n", computeFloatRange(1, 8, 23) , computeFloatRange(0, 8, 23));
   printf("    double[%Lf, %Lf]\n", computeFloatRange(1, 11, 52), computeFloatRange(0, 11, 52));         
+  // we can't calculate the long double range values becuase we have only the long double precision that not support to calculate the last value in the range :(
+  printf("!here the long double we can't calculate its range because the type long double percision is not support adding small values (decimal values)\n");
+  printf("So the exact problem is the mantisse it end with value 2 what is mean infinity value!\n");
   printf("    long double[%Lf, %Lf]\n", computeFloatRange(1, 15, 112), computeFloatRange(0, 15, 112));
   
 
-  //printf("----------> Exponent Notation: \n");               
-  
-  //printf("    float[%e, %e]\n", -FLT_MAX, FLT_MAX);          
-  //printf("    double[%e, %e]\n", -DBL_MAX, DBL_MAX);         
-  //printf("    long double[%Le, %Le]\n", -LDBL_MAX, LDBL_MAX);
+  printf("----------> Exponent Notation: \n");               
+
+  printf("    float[%Le, %Le]\n", computeFloatRange(1, 8, 23) , computeFloatRange(0, 8, 23));
+  printf("    double[%Le, %Le]\n", computeFloatRange(1, 11, 52), computeFloatRange(0, 11, 52));         
+  // we can't calculate the long double range values becuase we have only the long double precision that not support to calculate the last value in the range :(
+  printf("!here the long double we can't calculate its range because the type long double percision is not support adding small values (decimal values)\n");
+  printf("So the exact problem is the mantisse it end with value 2 what is mean infinity value!\n");
+  printf("    long double[%Le, %Le]\n", computeFloatRange(1, 15, 112), computeFloatRange(0, 15, 112));
+
 
   
 
@@ -108,15 +113,17 @@ long long int computeRange(long long int bit, long long int sign) {
 
 
 long double computeFloatRange(long long int signBit, long long int exponentBit, long long int mantissaBit) {
-  long long int sign = signBit == 0 ? 1 : -1;
-  unsigned long long int bias = (unsigned long long int)pow(2, exponentBit - 1) - 1;
-  unsigned long long int maxExponent = (unsigned long long int)pow(2, exponentBit) - 2;
-  long double mantissa = 1 ;
+  long double sign = signBit == 0L ? 1L : -1L;
+  long double bias = (long double)powl(2.0L, exponentBit - 1L) - 1L;
+  long double maxExponent = (long double)powl(2.0L, exponentBit) - 2L;
+  long double mantissa = 1L ;
   
   // we assume the the all bits on the mantissa are ones
   for(int i = 1; i <= mantissaBit; i++) {
-    mantissa = mantissa + (long double)powf(2, - i);
+    mantissa = mantissa + powl(2.0L, - (long double)i);
   }
 
-  return (long double)sign * ((long double)powf(2, maxExponent - bias)) * mantissa;
+  return sign 
+    * powl(2.0L, (long double)(maxExponent - bias)) 
+    * mantissa;
 }
