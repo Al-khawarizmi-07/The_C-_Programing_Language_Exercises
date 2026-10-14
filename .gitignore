@@ -9,6 +9,5 @@
 !*.h
 
 #Ignore files by their names
-test.c
 .idea
 .gitignore
