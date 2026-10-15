@@ -16,8 +16,19 @@ int main() {
 
   printf("e: %f, msg[]: %s", e, msg);
   
-  printf("len: %d", strlenn(msg));
+  printf("len: %d\n", strlenn(msg));
   
+  int year = 2027;
+
+  if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+    printf("the year is leap\n");
+  } else {
+    printf("the year is no leap\n");
+  }
+
+
+
+
    return 0;
 }
 
