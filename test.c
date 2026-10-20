@@ -5,6 +5,8 @@
 int noAutomatic;
 
 int strlenn(const char str[]);
+void counter();
+
 
 int main() {
   int automatic;
@@ -27,6 +29,9 @@ int main() {
   }
 
 
+  counter();
+  counter();
+  counter();
 
 
    return 0;
@@ -43,4 +48,10 @@ int strlenn(const char str[]) {
 
 
   return len;
+}
+void counter() {
+    static int count = 0;
+
+    count++;
+    printf("%d\n", count);
 }
