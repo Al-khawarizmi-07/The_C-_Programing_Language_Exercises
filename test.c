@@ -33,6 +33,15 @@ int main() {
   counter();
   counter();
 
+  // relational operations
+  // > >= < <= priority One
+  // == != priority two
+
+  // logical operation
+  // ! unary opiration with priority One
+  // && || binary operation with priority two
+ 
+  
 
    return 0;
 }
