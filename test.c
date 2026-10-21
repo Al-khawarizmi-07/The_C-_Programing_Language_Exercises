@@ -2,10 +2,12 @@
 
 
 int atoi(char string[]);
+char lower(char character);
 
 int main() {
-  int result = atoi("10");
-  printf("%d", result);
+  //int result = atoi("10");
+  //printf("%d", result);
+  printf("%c", lower('Z'));
   return 0;
 }
 
@@ -19,4 +21,10 @@ int atoi(char string[]) {
   }
 
   return number;
+}
+
+char lower(char character) {
+  if (character >= 'A' && character <= 'Z') {
+    return character + 32;
+  }
 }
