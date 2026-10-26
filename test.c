@@ -10,7 +10,9 @@ int main() {
   //printf("%d", result);
   //printf("%c", lower('Z'));
   //printf("%d", isdigit('0'));
-  printf("%d", -1L > 1LU);
+  printf("%d\n", -1L > 1LU);
+  signed char c = -120;
+  printf("%du\n", c);
   return 0;
 }
 
