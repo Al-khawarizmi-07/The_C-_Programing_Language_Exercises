@@ -11,8 +11,8 @@ int main() {
   //printf("%c", lower('Z'));
   //printf("%d", isdigit('0'));
   printf("%d\n", -1L > 1LU);
-  signed char c = -120;
-  printf("%du\n", c);
+  unsigned char c = 227;
+  printf("%d  \n", c);
   return 0;
 }
 
