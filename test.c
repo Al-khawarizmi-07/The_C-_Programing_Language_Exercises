@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ctype.h>
 
 
 int atoi(char string[]);
@@ -7,7 +8,9 @@ char lower(char character);
 int main() {
   //int result = atoi("10");
   //printf("%d", result);
-  printf("%c", lower('Z'));
+  //printf("%c", lower('Z'));
+  //printf("%d", isdigit('0'));
+  printf("%d", -1L > 1LU);
   return 0;
 }
 
@@ -25,6 +28,6 @@ int atoi(char string[]) {
 
 char lower(char character) {
   if (character >= 'A' && character <= 'Z') {
-    return character + 32;
+    return character + ('a' - 'A');
   }
 }
