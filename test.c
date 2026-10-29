@@ -2,6 +2,7 @@
 #include <ctype.h>
 
 
+void testo(int test);
 
 int main() {
   int i = 1255555555;
@@ -16,6 +17,11 @@ int main() {
   printf("%d\n", i);
   printf("%f\n", x);
 
+  testo(10);
+
   return 0;
 }
 
+void testo(int test) {
+  printf("%d", test);
+}
