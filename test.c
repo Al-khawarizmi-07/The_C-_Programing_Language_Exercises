@@ -3,6 +3,10 @@
 
 
 int main() {
-  printf("%d", isdigit('1'));
+  signed char testMachineSign = 'a';
+  signed int test = testMachineSign;
+  printf("%d", testMachineSign);
+  printf("%d", test);
+
   return 0;
 }
